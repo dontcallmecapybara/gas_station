@@ -23,6 +23,18 @@ def mins_to_time(minutes):
     return time
 
 
+def opt_machine_limits(gas_brand, mach_brands, mach_que, mach_lim):
+
+    opt_mach = []
+    for mach, brand in mach_brands.items():
+        if gas_brand in brand:
+            if mach_que[int(mach)] < mach_lim[mach]:
+                opt_mach.append(mach)
+            else:
+                None
+    return opt_mach
+
+
 def opt_machine_limits(gas_brand, gas_vol, mach_brands, mach_que, mach_lim, lost_custom):
 
     opt_mach = []
@@ -62,6 +74,21 @@ def opt_machine_queue(opt_lim, mac_que, customer):
             new_customer += itr
             new_customer += ' '
         mac_que[min_mac][1].append(new_customer)
+
+        
+
+
+
+    # print(f'В {time} новый клиент: {time} {brand} {volume}', end=' ')
+    # print(f'{refueling} встал в очередь к автомату {opt_mach}\n')
+
+    # for machine in range(1, mach_num + 1):
+    #     print(f'Автомат №{machine} максимальная очередь: {mach_lim[str(machine)]}', end=' ')
+    #     print('Марки бензина: ', end='')
+
+    #     for item in range(len(mach_brands[str(machine)])):
+    #         print(mach_brands[str(machine)][item], end=' ')
+    #     print('->' + '*' * mach_queue[machine] + '\n')
 
 
 # Input data about machines
@@ -122,8 +149,9 @@ for minutes in range(1,1441):
                 gasoline_volume[brand] += int(volume)
             else:
                 lost_clients += 1
+            print(dict_of_mach)
 
-        for itr in range(1, len(dict_of_mach) + 1):
+            for itr in range(1, len(dict_of_mach) + 1):
                 if len(dict_of_mach[itr][1]) > 0:
                     data_queue = dict_of_mach[itr][1][-1].split()
                     if str(mins_to_time(minutes)) == data_queue[0]:
@@ -131,7 +159,7 @@ for minutes in range(1,1441):
                         print('Автомат №1 максимальная очередь: ', machine_limits['1'], ' Марки бензина: ', machine_brands['1'][0], ' ->', (len(dict_of_mach[1][1]) + len(dict_of_mach[1][0])) * '*', sep='')
                         print('Автомат №2 максимальная очередь: ', machine_limits['2'], ' Марки бензина: ', machine_brands['2'][0], ' ->', (len(dict_of_mach[2][1]) + len(dict_of_mach[2][0])) * '*', sep='')
                         print('Автомат №3 максимальная очередь: ', machine_limits['3'], ' Марки бензина: ', machine_brands_str['3'], '->', (len(dict_of_mach[3][1]) + len(dict_of_mach[3][0])) * '*', sep='')
-
+                        print(dict_of_mach)
         for itr in range(1, len(dict_of_mach) + 1):
             if len(dict_of_mach[itr][0]) > 0:
                 data_dict_of_mach = dict_of_mach[itr][0][0].split()
@@ -142,7 +170,7 @@ for minutes in range(1,1441):
                     print('Автомат №1 максимальная очередь: ', machine_limits['1'], ' Марки бензина: ', machine_brands['1'][0], ' ->', (len(dict_of_mach[1][1]) + len(dict_of_mach[1][0])) * '*', sep='')
                     print('Автомат №2 максимальная очередь: ', machine_limits['2'], ' Марки бензина: ', machine_brands['2'][0], ' ->', (len(dict_of_mach[2][1]) + len(dict_of_mach[2][0])) * '*', sep='')
                     print('Автомат №3 максимальная очередь: ', machine_limits['3'], ' Марки бензина: ', machine_brands_str['3'], '->', (len(dict_of_mach[3][1]) + len(dict_of_mach[3][0])) * '*', sep='')
-
+                    print(dict_of_mach)
 
             if len(dict_of_mach[itr][0]) == 0 and len(dict_of_mach[itr][1]) > 0:
                 dict_of_mach[itr][0].append(dict_of_mach[itr][1][0])
@@ -164,6 +192,7 @@ for minutes in range(1,1441):
 
                 data_dict_of_mach = dict_of_mach[itr][0][0].split()
                 dict_of_mach[itr][0][0] = new_minutes + ' ' + data_dict_of_mach[1] + ' ' + data_dict_of_mach[2]
+                print(dict_of_mach)
 
 # Calculation lost volumes per day
 for pr_brand in gasoline_price:
