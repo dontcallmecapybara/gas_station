@@ -115,6 +115,6 @@ for minutes in range(1,1441):
                 dict_of_mach[itr][1].pop(0)
 
 # Result of model: how many liters of which brand is required
-# print('Бензина требуется на заправке:')
-# for br, vol in gasoline_volume.items():
-#     print(f'{br}: {vol} л')
+print('Бензина требуется на заправке:')
+for br, vol in gasoline_volume.items():
+    print(f'{br}: {vol} л')
