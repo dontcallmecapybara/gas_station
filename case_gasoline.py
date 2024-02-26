@@ -124,8 +124,7 @@ for minutes in range(1,1441):
         if brand in available_brands and time == mins_to_time(minutes):
             optimal_machine = opt_machine_limits(brand, machine_brands, machine_queue, machine_limits)
             opt_machine_queue(optimal_machine, dict_of_mach, client)
-        #print(client)
-        #print(dict_of_mach)
+            print(dict_of_mach, 'мужик в очереди райт нау', mins_to_time(minutes))
 
         for itr in range(1, len(dict_of_mach) + 1):
             if len(dict_of_mach[itr][0]) > 0:
