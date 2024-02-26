@@ -128,6 +128,13 @@ for minutes in range(1,1441):
         #print(dict_of_mach)
 
         for itr in range(1, len(dict_of_mach) + 1):
+            if len(dict_of_mach[itr][0]) > 0:
+                data_dict_of_mach = dict_of_mach[itr][0][0].split()
+                if str(mins_to_time(minutes)) == data_dict_of_mach[0]:
+                    dict_of_mach[itr][0].pop(0)
+                    print(dict_of_mach, 'кореш заправился на колонке', itr, mins_to_time(minutes))
+
+
             if len(dict_of_mach[itr][0]) == 0 and len(dict_of_mach[itr][1]) > 0:
                 dict_of_mach[itr][0].append(dict_of_mach[itr][1][0])
                 dict_of_mach[itr][1].pop(0)
@@ -144,12 +151,11 @@ for minutes in range(1,1441):
                                 new_minutes = minutes + num_litres // 10 + 1 + random.randint(-1, 1)
 
                 new_minutes = mins_to_time(new_minutes)
-                print(new_minutes)
 
-        for itr in range(1, len(dict_of_mach) + 1):
-            if len(dict_of_mach[itr][0]) == 0 and len(dict_of_mach[itr][1]) > 0:
-                dict_of_mach[itr][0].append(dict_of_mach[itr][1][0])
-                dict_of_mach[itr][1].pop(0)
+                data_dict_of_mach = dict_of_mach[itr][0][0].split()
+                dict_of_mach[itr][0][0] = new_minutes + ' ' + data_dict_of_mach[1] + ' ' + data_dict_of_mach[2]
+
+                print(dict_of_mach, 'новый чел начал заправляться на колонке', itr, mins_to_time(minutes))
 
 print(dict_of_mach)
 
