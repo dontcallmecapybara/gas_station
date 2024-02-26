@@ -35,13 +35,26 @@ def opt_machine_limits(gas_brand, mach_brands, mach_que, mach_lim):
     return opt_mach
 
 
+def opt_machine_limits(gas_brand, gas_vol, mach_brands, mach_que, mach_lim, lost_custom):
+
+    opt_mach = []
+    for mach, brand in mach_brands.items():
+        if gas_brand in brand:
+            if mach_que[int(mach)] < mach_lim[mach]:
+                mach_que[int(mach)] += 1
+                opt_mach.append(mach)
+                return opt_mach
+            else:
+                lost_custom[brand[0]] += int(gas_vol)
+                return opt_mach
+
+
 def opt_machine_queue(opt_lim, mac_que, customer):
     if len(opt_lim) == 1:
         new_customer = ''
         for itr in customer:
             new_customer += itr
             new_customer += ' '
-
         mac_que[int(opt_lim[0])][1].append(new_customer)
     else:
         min_mac = None
@@ -60,7 +73,8 @@ def opt_machine_queue(opt_lim, mac_que, customer):
         for itr in customer:
             new_customer += itr
             new_customer += ' '
-        mac_que[int(min_mac)][1].append(new_customer)
+        mac_que[min_mac][1].append(new_customer)
+
         
 
 
@@ -84,6 +98,7 @@ with open('machine_input.txt', 'r', encoding='utf-8') as f:
 available_brands = ['АИ-80', 'АИ-92', 'АИ-95', 'АИ-98']
 gasoline_price = {'АИ-80': 10, 'АИ-92': 20, 'АИ-95': 30, 'АИ-98': 40}
 gasoline_volume = {'АИ-80': 0, 'АИ-92': 0, 'АИ-95': 0, 'АИ-98': 0}
+lost_volume = {'АИ-80': 0, 'АИ-92': 0, 'АИ-95': 0, 'АИ-98': 0}
 
 # Creating dictionary with machines limits and brands
 machine_limits = {}
@@ -122,13 +137,15 @@ for minutes in range(1,1441):
         brand = client[2]
 
         if brand in available_brands and time == mins_to_time(minutes):
-            optimal_machine = opt_machine_limits(brand, machine_brands, machine_queue, machine_limits)
-            opt_machine_queue(optimal_machine, dict_of_mach, client)
-            for itr in range(1, len(dict_of_mach) + 1):
+            optimal_machine = opt_machine_limits(brand, volume, machine_brands, machine_queue, machine_limits, lost_volume)
+            if len(optimal_machine) != 0:
+                opt_machine_queue(optimal_machine, dict_of_mach, client)
+
+        for itr in range(1, len(dict_of_mach) + 1):
                 if len(dict_of_mach[itr][1]) > 0:
                     data_queue = dict_of_mach[itr][1][-1].split()
                     if str(mins_to_time(minutes)) == data_queue[0]:
-                        print(dict_of_mach, 'чел в очереди сейчас. Колонка', itr, mins_to_time(minutes))
+                        print('В', mins_to_time(minutes),'новый клиент:', dict_of_mach[itr][1][-1], 'встал в очередь к автомату №', itr)
 
         for itr in range(1, len(dict_of_mach) + 1):
             if len(dict_of_mach[itr][0]) > 0:
