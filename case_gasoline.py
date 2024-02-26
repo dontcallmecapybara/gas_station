@@ -1,9 +1,26 @@
-def customer_distribution(brand, )
+def mins_to_time(minutes):
+    time = ''
+    hours = minutes // 60
+    mins = minutes % 60
+
+    if hours < 10:
+        time += '0'
+        time += str(hours)
+    else:
+        time += str(hours)
+
+    time += ':'
+
+    if mins < 10:
+        time += '0'
+        time += str(mins)
+    else:
+        time += str(mins)
+
+    return time
 
 
-    print(opt_mach)
-    print(mach)
-    print(item)
+    
     # print(f'В {time} новый клиент: {time} {brand} {volume}', end=' ')
     # print(f'{refueling} встал в очередь к автомату {opt_mach}\n')
 
@@ -14,12 +31,10 @@ def customer_distribution(brand, )
     #     for item in range(len(mach_brands[str(machine)])):
     #         print(mach_brands[str(machine)][item], end=' ')
     #     print('->' + '*' * mach_queue[machine] + '\n')
-    
-    # return lst_clnts
 
 
 # Input data about machines
-with open('machine_input.txt', 'r') as f:
+with open('machine_input.txt', 'r', encoding='utf-8') as f:
     input_machine_data = f.read().splitlines()
 
 available_brands = ['АИ-80', 'АИ-92', 'АИ-95', 'АИ-98']
@@ -47,24 +62,26 @@ for item in range(1, machine_number + 1):
     machine_queue.update(temp_data)
 
 # Input data about new clients
-with open('input_test.txt', 'r') as f:
+with open('input_test.txt', 'r', encoding='utf-8') as f:
     input_clients_data = f.read().splitlines()
+    
+dict_of_mach = {}
+for itr in range(1, machine_number+1):
+    dict_of_mach[itr] = []
 
 # Output info about new client
-for client in input_clients_data:
-    client = client.split()
-    time = client[0]
-    volume = client[1]
-    brand = client[2]
+for minutes in range(1,1441):
+    for client in input_clients_data:
+        client = client.split()
+        time = client[0]
+        volume = client[1]
+        brand = client[2]
 
-    if brand in available_brands:
-        lost_clients = new_client(time, volume, brand, volume, machine_number, machine_queue, machine_limits, machine_brands)
-        gasoline_volume[brand] += int(volume)
+        if brand in available_brands and time == mins_to_time(minutes):
+            new_client(time, volume, brand, volume, machine_number, machine_queue, machine_limits, machine_brands)
+            gasoline_volume[brand] += int(volume)
 
 # Result of model: how many liters of which brand is required
-# print('Бензина требуется на заправке:')
-# for br, vol in gasoline_volume.items():
-#     print(f'{br}: {vol} л')
-
-# print(f'Количество уехавших клиентов: {lost_clients}')
-print(machine_queue)
+print('Бензина требуется на заправке:')
+for br, vol in gasoline_volume.items():
+    print(f'{br}: {vol} л')
