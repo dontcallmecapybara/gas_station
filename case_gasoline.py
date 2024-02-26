@@ -23,18 +23,6 @@ def mins_to_time(minutes):
     return time
 
 
-def opt_machine_limits(gas_brand, mach_brands, mach_que, mach_lim):
-
-    opt_mach = []
-    for mach, brand in mach_brands.items():
-        if gas_brand in brand:
-            if mach_que[int(mach)] < mach_lim[mach]:
-                opt_mach.append(mach)
-            else:
-                None
-    return opt_mach
-
-
 def opt_machine_limits(gas_brand, gas_vol, mach_brands, mach_que, mach_lim, lost_custom):
 
     opt_mach = []
@@ -74,21 +62,6 @@ def opt_machine_queue(opt_lim, mac_que, customer):
             new_customer += itr
             new_customer += ' '
         mac_que[min_mac][1].append(new_customer)
-
-        
-
-
-
-    # print(f'В {time} новый клиент: {time} {brand} {volume}', end=' ')
-    # print(f'{refueling} встал в очередь к автомату {opt_mach}\n')
-
-    # for machine in range(1, mach_num + 1):
-    #     print(f'Автомат №{machine} максимальная очередь: {mach_lim[str(machine)]}', end=' ')
-    #     print('Марки бензина: ', end='')
-
-    #     for item in range(len(mach_brands[str(machine)])):
-    #         print(mach_brands[str(machine)][item], end=' ')
-    #     print('->' + '*' * mach_queue[machine] + '\n')
 
 
 # Input data about machines
@@ -174,6 +147,7 @@ for minutes in range(1,1441):
             if len(dict_of_mach[itr][0]) == 0 and len(dict_of_mach[itr][1]) > 0:
                 dict_of_mach[itr][0].append(dict_of_mach[itr][1][0])
                 dict_of_mach[itr][1].pop(0)
+                machine_queue[itr] -= 1
 
                 for itr1 in dict_of_mach[itr][0][0].split():
                     if len(itr1) < 4:
