@@ -124,7 +124,11 @@ for minutes in range(1,1441):
         if brand in available_brands and time == mins_to_time(minutes):
             optimal_machine = opt_machine_limits(brand, machine_brands, machine_queue, machine_limits)
             opt_machine_queue(optimal_machine, dict_of_mach, client)
-            print(dict_of_mach, 'мужик в очереди райт нау', mins_to_time(minutes))
+            for itr in range(1, len(dict_of_mach) + 1):
+                if len(dict_of_mach[itr][1]) > 0:
+                    data_queue = dict_of_mach[itr][1][-1].split()
+                    if str(mins_to_time(minutes)) == data_queue[0]:
+                        print(dict_of_mach, 'чел в очереди сейчас. Колонка', itr, mins_to_time(minutes))
 
         for itr in range(1, len(dict_of_mach) + 1):
             if len(dict_of_mach[itr][0]) > 0:
