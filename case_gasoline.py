@@ -37,7 +37,12 @@ def opt_machine_limits(gas_brand, mach_brands, mach_que, mach_lim):
 
 def opt_machine_queue(opt_lim, mac_que, customer):
     if len(opt_lim) == 1:
-        mac_que[int(opt_lim[0])][1].append(customer)
+        new_customer = ''
+        for itr in customer:
+            new_customer += itr
+            new_customer += ' '
+
+        mac_que[int(opt_lim[0])][1].append(new_customer)
     else:
         min_mac = None
         min_que = None
@@ -51,7 +56,11 @@ def opt_machine_queue(opt_lim, mac_que, customer):
                         if min_que > len(v[1]):
                             min_que = len(v[1])
                             min_mac = k
-        mac_que[int(min_mac)][1].append(customer)
+        new_customer = ''
+        for itr in customer:
+            new_customer += itr
+            new_customer += ' '
+        mac_que[int(min_mac)][1].append(new_customer)
         
 
 
@@ -115,6 +124,8 @@ for minutes in range(1,1441):
         if brand in available_brands and time == mins_to_time(minutes):
             optimal_machine = opt_machine_limits(brand, machine_brands, machine_queue, machine_limits)
             opt_machine_queue(optimal_machine, dict_of_mach, client)
+        #print(client)
+        #print(dict_of_mach)
 
         for itr in range(1, len(dict_of_mach) + 1):
             if len(dict_of_mach[itr][0]) == 0 and len(dict_of_mach[itr][1]) > 0:
@@ -128,11 +139,12 @@ for minutes in range(1,1441):
                             new_minutes = minutes + 1 + random.randint(0, 1)
                         else:
                             if num_litres % 10 == 0:
-                                new_minutes = num_litres // 10 + random.randint(-1, 1)
+                                new_minutes = minutes + num_litres // 10 + random.randint(-1, 1)
                             if num_litres % 10 != 0:
-                                new_minutes = num_litres // 10 + 1 + random.randint(-1, 1)
+                                new_minutes = minutes + num_litres // 10 + 1 + random.randint(-1, 1)
 
                 new_minutes = mins_to_time(new_minutes)
+                print(new_minutes)
 
         for itr in range(1, len(dict_of_mach) + 1):
             if len(dict_of_mach[itr][0]) == 0 and len(dict_of_mach[itr][1]) > 0:
