@@ -1,3 +1,6 @@
+import random
+
+
 def mins_to_time(minutes):
     time = ''
     hours = minutes // 60
@@ -23,27 +26,33 @@ def mins_to_time(minutes):
 def opt_machine_limits(gas_brand, mach_brands, mach_que, mach_lim):
 
     opt_mach = []
-    print(mach_lim)
     for mach, brand in mach_brands.items():
         if gas_brand in brand:
             if mach_que[int(mach)] < mach_lim[mach]:
-                opt_mach.append(int(mach))
+                opt_mach.append(mach)
             else:
                 None
     return opt_mach
 
-def opt_machine_queue(opt_lim, mac_que):
+
+def opt_machine_queue(opt_lim, mac_que, customer):
     if len(opt_lim) == 1:
-        mac_que[opt_lim[0]] += 1
+        mac_que[int(opt_lim[0])][1].append(customer)
     else:
-        min_que = 0
+        min_mac = None
+        min_que = None
         for item in opt_lim:
             for k, v in mac_que.items():
-                if item == k:
-                    if min_que >= v:
-                        min_que = v
+                if int(item) == k:
+                    if min_que == None:
+                        min_que = len(v[1])
                         min_mac = k
-        mac_que[min_mac] += 1
+                    else:
+                        if min_que > len(v[1]):
+                            min_que = len(v[1])
+                            min_mac = k
+        mac_que[int(min_mac)][1].append(customer)
+        
 
 
 
@@ -105,16 +114,34 @@ for minutes in range(1,1441):
 
         if brand in available_brands and time == mins_to_time(minutes):
             optimal_machine = opt_machine_limits(brand, machine_brands, machine_queue, machine_limits)
-            opt_machine_queue(optimal_machine, machine_queue)
-            print(machine_queue)
-            # gasoline_volume[brand] += int(volume)
-        
+            opt_machine_queue(optimal_machine, dict_of_mach, client)
+
         for itr in range(1, len(dict_of_mach) + 1):
             if len(dict_of_mach[itr][0]) == 0 and len(dict_of_mach[itr][1]) > 0:
                 dict_of_mach[itr][0].append(dict_of_mach[itr][1][0])
                 dict_of_mach[itr][1].pop(0)
 
+                for itr1 in dict_of_mach[itr][0][0].split():
+                    if len(itr1) < 4:
+                        num_litres = int(itr1)
+                        if num_litres <= 10:
+                            new_minutes = minutes + 1 + random.randint(0, 1)
+                        else:
+                            if num_litres % 10 == 0:
+                                new_minutes = num_litres // 10 + random.randint(-1, 1)
+                            if num_litres % 10 != 0:
+                                new_minutes = num_litres // 10 + 1 + random.randint(-1, 1)
+
+                new_minutes = mins_to_time(new_minutes)
+
+        for itr in range(1, len(dict_of_mach) + 1):
+            if len(dict_of_mach[itr][0]) == 0 and len(dict_of_mach[itr][1]) > 0:
+                dict_of_mach[itr][0].append(dict_of_mach[itr][1][0])
+                dict_of_mach[itr][1].pop(0)
+
+print(dict_of_mach)
+
 # Result of model: how many liters of which brand is required
-print('Бензина требуется на заправке:')
-for br, vol in gasoline_volume.items():
-    print(f'{br}: {vol} л')
+# print('Бензина требуется на заправке:')
+# for br, vol in gasoline_volume.items():
+#     print(f'{br}: {vol} л')
