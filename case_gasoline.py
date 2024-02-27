@@ -1,5 +1,5 @@
 import random
-
+import ru_local as ru
 
 def mins_to_time(minutes):
     time = ''
@@ -123,6 +123,7 @@ for minutes in range(1, 1441):
         volume = client[1]
         brand = client[2]
 
+        # Searching for new client
         if brand in available_brands and time == mins_to_time(minutes):
             optimal_machine = opt_machine_limits(brand, volume, machine_brands, machine_queue, machine_limits,
                                                  lost_volume)
@@ -131,24 +132,24 @@ for minutes in range(1, 1441):
                 gasoline_volume[brand] += int(volume)
             else:
                 lost_clients += 1
-            print(dict_of_mach)
 
             for itr in range(1, len(dict_of_mach) + 1):
                 if len(dict_of_mach[itr][1]) > 0:
                     data_queue = dict_of_mach[itr][1][-1].split()
                     if str(mins_to_time(minutes)) == data_queue[0]:
-                        print('В ', mins_to_time(minutes), ' новый клиент: ', dict_of_mach[itr][1][-1],
-                              'встал в очередь к автомату №', itr, sep='')
-                        print('Автомат №1 максимальная очередь: ', machine_limits['1'], ' Марки бензина: ',
+                        print('\U000026FD', ru.At_ru, mins_to_time(minutes), ru.new_client_ru, dict_of_mach[itr][1][-1],
+                              ru.in_queue_ru, itr, sep='')
+                        print(ru.gasoline_1, machine_limits['1'], ru.benz_brand,
                               machine_brands['1'][0], ' ->', (len(dict_of_mach[1][1]) + len(dict_of_mach[1][0])) * '*',
                               sep='')
-                        print('Автомат №2 максимальная очередь: ', machine_limits['2'], ' Марки бензина: ',
+                        print(ru.gasoline_2, machine_limits['2'], ru.benz_brand,
                               machine_brands['2'][0], ' ->', (len(dict_of_mach[2][1]) + len(dict_of_mach[2][0])) * '*',
                               sep='')
-                        print('Автомат №3 максимальная очередь: ', machine_limits['3'], ' Марки бензина: ',
+                        print(ru.gasoline_3, machine_limits['3'], ru.benz_brand,
                               machine_brands_str['3'], '->', (len(dict_of_mach[3][1]) + len(dict_of_mach[3][0])) * '*',
                               sep='')
-                        print(dict_of_mach)
+
+        # Clients that finished
         for itr in range(1, len(dict_of_mach) + 1):
             if len(dict_of_mach[itr][0]) > 0:
                 data_dict_of_mach = dict_of_mach[itr][0][0].split()
@@ -156,15 +157,15 @@ for minutes in range(1, 1441):
                     finished_client = dict_of_mach[itr][2][0]
                     dict_of_mach[itr][0].pop(0)
                     dict_of_mach[itr][2].pop(0)
-                    print('В ', mins_to_time(minutes), ' клиент: ', finished_client,
-                          ' заправил свой автомобиль и покинул АЗС', sep='')
-                    print('Автомат №1 максимальная очередь: ', machine_limits['1'], ' Марки бензина: ',
+                    print('\U0001F697', ru.At_ru, mins_to_time(minutes), ru.client_ru, finished_client,
+                          ru.finished_client, sep='')
+                    print(ru.gasoline_1, machine_limits['1'], ru.benz_brand,
                           machine_brands['1'][0], ' ->', (len(dict_of_mach[1][1]) + len(dict_of_mach[1][0])) * '*',
                           sep='')
-                    print('Автомат №2 максимальная очередь: ', machine_limits['2'], ' Марки бензина: ',
+                    print(ru.gasoline_2, machine_limits['2'], ru.benz_brand,
                           machine_brands['2'][0], ' ->', (len(dict_of_mach[2][1]) + len(dict_of_mach[2][0])) * '*',
                           sep='')
-                    print('Автомат №3 максимальная очередь: ', machine_limits['3'], ' Марки бензина: ',
+                    print(ru.gasoline_3, machine_limits['3'], ru.benz_brand,
                           machine_brands_str['3'], '->', (len(dict_of_mach[3][1]) + len(dict_of_mach[3][0])) * '*',
                           sep='')
 
@@ -174,6 +175,7 @@ for minutes in range(1, 1441):
                 dict_of_mach[itr][1].pop(0)
                 machine_queue[itr] -= 1
 
+                # Counting time for fueling
                 for itr1 in dict_of_mach[itr][0][0].split():
                     if len(itr1) < 4:
                         num_litres = int(itr1)
@@ -217,13 +219,13 @@ for item in lost_volume:
 print('\n', '_' * 25)
 print('\nБензина требуется на заправке:')
 for br, vol in gasoline_volume.items():
-    print(f'{br}: {vol} л')
+    print(f'{br}: {vol} л.')
 
 # Output info: total revenue
-print(f'\nОбщая сумма продаж за сутки: {total_revenue}')
+print(f'\nОбщая сумма продаж за сутки: {total_revenue} руб.')
 
 # Output info: total lost income
-print(f'\nОбщий потеряный доход: {total_losts}')
+print(f'\nОбщий потеряный доход: {total_losts} руб.')
 
 # Output info: total lost clients
 print(f'\nКоличество потеряных клиентов: {lost_clients}\n')
