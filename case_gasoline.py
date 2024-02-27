@@ -24,7 +24,6 @@ def mins_to_time(minutes):
 
 
 def opt_machine_limits(gas_brand, mach_brands, mach_que, mach_lim):
-
     opt_mach = []
     for mach, brand in mach_brands.items():
         if gas_brand in brand:
@@ -36,7 +35,6 @@ def opt_machine_limits(gas_brand, mach_brands, mach_que, mach_lim):
 
 
 def opt_machine_limits(gas_brand, gas_vol, mach_brands, mach_que, mach_lim, lost_custom):
-
     opt_mach = []
     for mach, brand in mach_brands.items():
         if gas_brand in brand:
@@ -74,10 +72,6 @@ def opt_machine_queue(opt_lim, mac_que, customer):
             new_customer += itr
             new_customer += ' '
         mac_que[min_mac][1].append(new_customer)
-
-        
-
-
 
     # print(f'В {time} новый клиент: {time} {brand} {volume}', end=' ')
     # print(f'{refueling} встал в очередь к автомату {opt_mach}\n')
@@ -128,13 +122,13 @@ for item in range(1, machine_number + 1):
 # Input data about new clients
 with open('input_test.txt', 'r', encoding='utf-8') as f:
     input_clients_data = f.read().splitlines()
-    
+
 dict_of_mach = {}
-for itr in range(1, machine_number+1):
-    dict_of_mach[itr] = [[], []]
+for itr in range(1, machine_number + 1):
+    dict_of_mach[itr] = [[], [], []]
 
 # Output info about new client
-for minutes in range(1,1441):
+for minutes in range(1, 1441):
     for client in input_clients_data:
         client = client.split()
         time = client[0]
@@ -155,25 +149,40 @@ for minutes in range(1,1441):
                 if len(dict_of_mach[itr][1]) > 0:
                     data_queue = dict_of_mach[itr][1][-1].split()
                     if str(mins_to_time(minutes)) == data_queue[0]:
-                        print('В ', mins_to_time(minutes),' новый клиент: ', dict_of_mach[itr][1][-1], 'встал в очередь к автомату №', itr, sep='')
-                        print('Автомат №1 максимальная очередь: ', machine_limits['1'], ' Марки бензина: ', machine_brands['1'][0], ' ->', (len(dict_of_mach[1][1]) + len(dict_of_mach[1][0])) * '*', sep='')
-                        print('Автомат №2 максимальная очередь: ', machine_limits['2'], ' Марки бензина: ', machine_brands['2'][0], ' ->', (len(dict_of_mach[2][1]) + len(dict_of_mach[2][0])) * '*', sep='')
-                        print('Автомат №3 максимальная очередь: ', machine_limits['3'], ' Марки бензина: ', machine_brands_str['3'], '->', (len(dict_of_mach[3][1]) + len(dict_of_mach[3][0])) * '*', sep='')
+                        print('В ', mins_to_time(minutes), ' новый клиент: ', dict_of_mach[itr][1][-1],
+                              'встал в очередь к автомату №', itr, sep='')
+                        print('Автомат №1 максимальная очередь: ', machine_limits['1'], ' Марки бензина: ',
+                              machine_brands['1'][0], ' ->', (len(dict_of_mach[1][1]) + len(dict_of_mach[1][0])) * '*',
+                              sep='')
+                        print('Автомат №2 максимальная очередь: ', machine_limits['2'], ' Марки бензина: ',
+                              machine_brands['2'][0], ' ->', (len(dict_of_mach[2][1]) + len(dict_of_mach[2][0])) * '*',
+                              sep='')
+                        print('Автомат №3 максимальная очередь: ', machine_limits['3'], ' Марки бензина: ',
+                              machine_brands_str['3'], '->', (len(dict_of_mach[3][1]) + len(dict_of_mach[3][0])) * '*',
+                              sep='')
                         print(dict_of_mach)
         for itr in range(1, len(dict_of_mach) + 1):
             if len(dict_of_mach[itr][0]) > 0:
                 data_dict_of_mach = dict_of_mach[itr][0][0].split()
                 if str(mins_to_time(minutes)) == data_dict_of_mach[0]:
-                    finished_client = dict_of_mach[itr][0][0]
+                    finished_client = dict_of_mach[itr][2][0]
                     dict_of_mach[itr][0].pop(0)
-                    print('В ', mins_to_time(minutes), ' клиент: ', finished_client, ' заправил свой автомобиль и покинул АЗС', sep='')
-                    print('Автомат №1 максимальная очередь: ', machine_limits['1'], ' Марки бензина: ', machine_brands['1'][0], ' ->', (len(dict_of_mach[1][1]) + len(dict_of_mach[1][0])) * '*', sep='')
-                    print('Автомат №2 максимальная очередь: ', machine_limits['2'], ' Марки бензина: ', machine_brands['2'][0], ' ->', (len(dict_of_mach[2][1]) + len(dict_of_mach[2][0])) * '*', sep='')
-                    print('Автомат №3 максимальная очередь: ', machine_limits['3'], ' Марки бензина: ', machine_brands_str['3'], '->', (len(dict_of_mach[3][1]) + len(dict_of_mach[3][0])) * '*', sep='')
-                    print(dict_of_mach)
+                    dict_of_mach[itr][2].pop(0)
+                    print('В ', mins_to_time(minutes), ' клиент: ', finished_client,
+                          ' заправил свой автомобиль и покинул АЗС', sep='')
+                    print('Автомат №1 максимальная очередь: ', machine_limits['1'], ' Марки бензина: ',
+                          machine_brands['1'][0], ' ->', (len(dict_of_mach[1][1]) + len(dict_of_mach[1][0])) * '*',
+                          sep='')
+                    print('Автомат №2 максимальная очередь: ', machine_limits['2'], ' Марки бензина: ',
+                          machine_brands['2'][0], ' ->', (len(dict_of_mach[2][1]) + len(dict_of_mach[2][0])) * '*',
+                          sep='')
+                    print('Автомат №3 максимальная очередь: ', machine_limits['3'], ' Марки бензина: ',
+                          machine_brands_str['3'], '->', (len(dict_of_mach[3][1]) + len(dict_of_mach[3][0])) * '*',
+                          sep='')
 
             if len(dict_of_mach[itr][0]) == 0 and len(dict_of_mach[itr][1]) > 0:
                 dict_of_mach[itr][0].append(dict_of_mach[itr][1][0])
+                dict_of_mach[itr][2].append(dict_of_mach[itr][1][0])
                 dict_of_mach[itr][1].pop(0)
                 machine_queue[itr] -= 1
 
@@ -192,7 +201,6 @@ for minutes in range(1,1441):
 
                 data_dict_of_mach = dict_of_mach[itr][0][0].split()
                 dict_of_mach[itr][0][0] = new_minutes + ' ' + data_dict_of_mach[1] + ' ' + data_dict_of_mach[2]
-                print(dict_of_mach)
 
 # Calculation lost volumes per day
 for pr_brand in gasoline_price:
