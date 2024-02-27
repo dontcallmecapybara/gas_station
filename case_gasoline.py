@@ -1,14 +1,21 @@
 '''
 Case: Gas Station
 Group:
-Gagol Egor
-Tarlo Evgeny = 60
+Gagol Egor = 90
+Tarlo Evgeny = 90
 '''
 
 import random
 import ru_local as ru
 
+
 def mins_to_time(minutes):
+    '''Turning amount of minutes to time with hours and minutes
+    
+    args:
+    
+    minutes -- number of minutes
+    '''
     time = ''
     hours = minutes // 60
     mins = minutes % 60
@@ -40,7 +47,7 @@ def opt_machine_limits(gas_brand, gas_vol, mach_brands, mach_que, mach_lim, lost
     mach_brand -- list with brands of each station
     mach_que -- current queue for stations
     mach_lim -- maximum queue for stations
-    
+
     '''
     opt_mach = []
     for mach, brand in mach_brands.items():
@@ -57,7 +64,7 @@ def opt_machine_limits(gas_brand, gas_vol, mach_brands, mach_que, mach_lim, lost
 def opt_machine_queue(opt_lim, mac_que, customer):
     '''Determines the optimal station by the smallest queue and adds
     the client to the desired one
-    
+
     Args:
 
     opt_lim -- list with suitable stations
