@@ -73,18 +73,6 @@ def opt_machine_queue(opt_lim, mac_que, customer):
             new_customer += ' '
         mac_que[min_mac][1].append(new_customer)
 
-    # print(f'В {time} новый клиент: {time} {brand} {volume}', end=' ')
-    # print(f'{refueling} встал в очередь к автомату {opt_mach}\n')
-
-    # for machine in range(1, mach_num + 1):
-    #     print(f'Автомат №{machine} максимальная очередь: {mach_lim[str(machine)]}', end=' ')
-    #     print('Марки бензина: ', end='')
-
-    #     for item in range(len(mach_brands[str(machine)])):
-    #         print(mach_brands[str(machine)][item], end=' ')
-    #     print('->' + '*' * mach_queue[machine] + '\n')
-
-
 # Input data about machines
 with open('machine_input.txt', 'r', encoding='utf-8') as f:
     input_machine_data = f.read().splitlines()
