@@ -1,3 +1,10 @@
+'''
+Case: Gas Station
+Group:
+Gagol Egor
+Tarlo Evgeny = 60
+'''
+
 import random
 import ru_local as ru
 
@@ -23,18 +30,18 @@ def mins_to_time(minutes):
     return time
 
 
-def opt_machine_limits(gas_brand, mach_brands, mach_que, mach_lim):
-    opt_mach = []
-    for mach, brand in mach_brands.items():
-        if gas_brand in brand:
-            if mach_que[int(mach)] < mach_lim[mach]:
-                opt_mach.append(mach)
-            else:
-                None
-    return opt_mach
-
-
 def opt_machine_limits(gas_brand, gas_vol, mach_brands, mach_que, mach_lim, lost_custom):
+    '''Determines suitable gas stations by the maximum queue and type of fuel;
+    returns list with numbers of suitable stations
+
+    Args:
+
+    gas_brand -- petrol brand the customer needs
+    mach_brand -- list with brands of each station
+    mach_que -- current queue for stations
+    mach_lim -- maximum queue for stations
+    
+    '''
     opt_mach = []
     for mach, brand in mach_brands.items():
         if gas_brand in brand:
@@ -48,6 +55,16 @@ def opt_machine_limits(gas_brand, gas_vol, mach_brands, mach_que, mach_lim, lost
 
 
 def opt_machine_queue(opt_lim, mac_que, customer):
+    '''Determines the optimal station by the smallest queue and adds
+    the client to the desired one
+    
+    Args:
+
+    opt_lim -- list with suitable stations
+    mac_que -- dictionary with current queue
+    customer -- info about client to add it to the queue
+
+    '''
     if len(opt_lim) == 1:
         new_customer = ''
         for itr in customer:
@@ -73,14 +90,15 @@ def opt_machine_queue(opt_lim, mac_que, customer):
             new_customer += ' '
         mac_que[min_mac][1].append(new_customer)
 
+
 # Input data about machines
 with open('machine_input.txt', 'r', encoding='utf-8') as f:
     input_machine_data = f.read().splitlines()
 
-available_brands = ['АИ-80', 'АИ-92', 'АИ-95', 'АИ-98']
-gasoline_price = {'АИ-80': 10, 'АИ-92': 20, 'АИ-95': 30, 'АИ-98': 40}
-gasoline_volume = {'АИ-80': 0, 'АИ-92': 0, 'АИ-95': 0, 'АИ-98': 0}
-lost_volume = {'АИ-80': 0, 'АИ-92': 0, 'АИ-95': 0, 'АИ-98': 0}
+available_brands = [ru.ai80, ru.ai92, ru.ai95, ru.ai98]
+gasoline_price = {ru.ai80: 25, ru.ai92: 49, ru.ai95: 53, ru.ai98: 68}
+gasoline_volume = {ru.ai80: 0, ru.ai92: 0, ru.ai95: 0, ru.ai98: 0}
+lost_volume = {ru.ai80: 0, ru.ai92: 0, ru.ai95: 0, ru.ai98: 0}
 lost_clients = 0
 
 # Creating dictionary with machines limits and brands
@@ -108,7 +126,7 @@ for item in range(1, machine_number + 1):
     machine_queue.update(temp_data)
 
 # Input data about new clients
-with open('input_test.txt', 'r', encoding='utf-8') as f:
+with open('input.txt', 'r', encoding='utf-8') as f:
     input_clients_data = f.read().splitlines()
 
 dict_of_mach = {}
@@ -123,10 +141,10 @@ for minutes in range(1, 1441):
         volume = client[1]
         brand = client[2]
 
-        # Searching for new client
+        # Checking for gasoline brand and time
         if brand in available_brands and time == mins_to_time(minutes):
-            optimal_machine = opt_machine_limits(brand, volume, machine_brands, machine_queue, machine_limits,
-                                                 lost_volume)
+            optimal_machine = opt_machine_limits(brand, volume,
+                                                 machine_brands, machine_queue, machine_limits, lost_volume)
             if len(optimal_machine) != 0:
                 opt_machine_queue(optimal_machine, dict_of_mach, client)
                 gasoline_volume[brand] += int(volume)
@@ -137,15 +155,15 @@ for minutes in range(1, 1441):
                 if len(dict_of_mach[itr][1]) > 0:
                     data_queue = dict_of_mach[itr][1][-1].split()
                     if str(mins_to_time(minutes)) == data_queue[0]:
-                        print('\U000026FD', ru.At_ru, mins_to_time(minutes), ru.new_client_ru, dict_of_mach[itr][1][-1],
+                        print('\U000026FD', ru.at_ru, mins_to_time(minutes), ru.new_client_ru, dict_of_mach[itr][1][-1],
                               ru.in_queue_ru, itr, sep='')
-                        print(ru.gasoline_1, machine_limits['1'], ru.benz_brand,
+                        print(ru.gasoline_1, machine_limits['1'], ru.petrol_brand,
                               machine_brands['1'][0], ' ->', (len(dict_of_mach[1][1]) + len(dict_of_mach[1][0])) * '*',
                               sep='')
-                        print(ru.gasoline_2, machine_limits['2'], ru.benz_brand,
+                        print(ru.gasoline_2, machine_limits['2'], ru.petrol_brand,
                               machine_brands['2'][0], ' ->', (len(dict_of_mach[2][1]) + len(dict_of_mach[2][0])) * '*',
                               sep='')
-                        print(ru.gasoline_3, machine_limits['3'], ru.benz_brand,
+                        print(ru.gasoline_3, machine_limits['3'], ru.petrol_brand,
                               machine_brands_str['3'], '->', (len(dict_of_mach[3][1]) + len(dict_of_mach[3][0])) * '*',
                               sep='')
 
@@ -157,15 +175,15 @@ for minutes in range(1, 1441):
                     finished_client = dict_of_mach[itr][2][0]
                     dict_of_mach[itr][0].pop(0)
                     dict_of_mach[itr][2].pop(0)
-                    print('\U0001F697', ru.At_ru, mins_to_time(minutes), ru.client_ru, finished_client,
+                    print('\U0001F697', ru.at_ru, mins_to_time(minutes), ru.client_ru, finished_client,
                           ru.finished_client, sep='')
-                    print(ru.gasoline_1, machine_limits['1'], ru.benz_brand,
+                    print(ru.gasoline_1, machine_limits['1'], ru.petrol_brand,
                           machine_brands['1'][0], ' ->', (len(dict_of_mach[1][1]) + len(dict_of_mach[1][0])) * '*',
                           sep='')
-                    print(ru.gasoline_2, machine_limits['2'], ru.benz_brand,
+                    print(ru.gasoline_2, machine_limits['2'], ru.petrol_brand,
                           machine_brands['2'][0], ' ->', (len(dict_of_mach[2][1]) + len(dict_of_mach[2][0])) * '*',
                           sep='')
-                    print(ru.gasoline_3, machine_limits['3'], ru.benz_brand,
+                    print(ru.gasoline_3, machine_limits['3'], ru.petrol_brand,
                           machine_brands_str['3'], '->', (len(dict_of_mach[3][1]) + len(dict_of_mach[3][0])) * '*',
                           sep='')
 
@@ -192,13 +210,13 @@ for minutes in range(1, 1441):
                 data_dict_of_mach = dict_of_mach[itr][0][0].split()
                 dict_of_mach[itr][0][0] = new_minutes + ' ' + data_dict_of_mach[1] + ' ' + data_dict_of_mach[2]
 
-# Calculation lost volumes per day
+# Calculation of lost volumes per day
 for pr_brand in gasoline_price:
     for vol_brand in lost_volume:
         if pr_brand == vol_brand:
             lost_volume[vol_brand] *= gasoline_price[pr_brand]
 
-# Calculation lost profits based on brand of gasoline per day
+# Calculation of lost profits based on brand of gasoline per day
 pet_vol_price = gasoline_volume.copy()
 for pr_pet in gasoline_price:
     for vol_pet in gasoline_volume:
@@ -216,16 +234,15 @@ for item in lost_volume:
     total_losts += lost_volume[item]
 
 # Output info: how many liters of which brand is required
-print('\n', '_' * 25)
-print('\nБензина требуется на заправке:')
+print('\n\n', ru.need_gasoline_volume, sep='')
 for br, vol in gasoline_volume.items():
-    print(f'{br}: {vol} л.')
+    print(f'{br}: {vol}', ru.liters)
 
 # Output info: total revenue
-print(f'\nОбщая сумма продаж за сутки: {total_revenue} руб.')
+print('\n', ru.total_revenue_day, total_revenue, ru.rubles, sep='')
 
 # Output info: total lost income
-print(f'\nОбщий потеряный доход: {total_losts} руб.')
+print(f'\n', ru.total_revenue_lost_day, total_losts, ru.rubles, sep='')
 
 # Output info: total lost clients
-print(f'\nКоличество потеряных клиентов: {lost_clients}\n')
+print(f'\n', ru.total_lost_clients, lost_clients, ru.person, '\n', sep='')
