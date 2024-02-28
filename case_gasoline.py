@@ -11,9 +11,9 @@ import ru_local as ru
 
 def mins_to_time(minutes):
     '''Turning amount of minutes to time with hours and minutes
-    
+
     args:
-    
+
     minutes -- number of minutes
     '''
     time = ''
@@ -126,6 +126,8 @@ for machine in input_machine_data:
 # Getting number of machines
 machine_number = len(machine_brands)
 
+print(machine_brands)
+
 # Creating dictionary with machinces queue
 machine_queue = {}
 for item in range(1, machine_number + 1):
@@ -164,15 +166,11 @@ for minutes in range(1, 1441):
                     if str(mins_to_time(minutes)) == data_queue[0]:
                         print('\U000026FD', ru.at_ru, mins_to_time(minutes), ru.new_client_ru, dict_of_mach[itr][1][-1],
                               ru.in_queue_ru, itr, sep='')
-                        print(ru.gasoline_1, machine_limits['1'], ru.petrol_brand,
-                              machine_brands['1'][0], ' ->', (len(dict_of_mach[1][1]) + len(dict_of_mach[1][0])) * '*',
-                              sep='')
-                        print(ru.gasoline_2, machine_limits['2'], ru.petrol_brand,
-                              machine_brands['2'][0], ' ->', (len(dict_of_mach[2][1]) + len(dict_of_mach[2][0])) * '*',
-                              sep='')
-                        print(ru.gasoline_3, machine_limits['3'], ru.petrol_brand,
-                              machine_brands_str['3'], '->', (len(dict_of_mach[3][1]) + len(dict_of_mach[3][0])) * '*',
-                              sep='')
+                        for itr in range(1, len(dict_of_mach) + 1):
+                            print(ru.gasoline, itr, ru.max_queue, machine_limits[str(itr)], ru.petrol_brand,
+                                  machine_brands_str[str(itr)], ' ->',
+                                  (len(dict_of_mach[itr][1]) + len(dict_of_mach[itr][0])) * '*',
+                                  sep='')
 
         # Clients that finished
         for itr in range(1, len(dict_of_mach) + 1):
@@ -184,15 +182,10 @@ for minutes in range(1, 1441):
                     dict_of_mach[itr][2].pop(0)
                     print('\U0001F697', ru.at_ru, mins_to_time(minutes), ru.client_ru, finished_client,
                           ru.finished_client, sep='')
-                    print(ru.gasoline_1, machine_limits['1'], ru.petrol_brand,
-                          machine_brands['1'][0], ' ->', (len(dict_of_mach[1][1]) + len(dict_of_mach[1][0])) * '*',
-                          sep='')
-                    print(ru.gasoline_2, machine_limits['2'], ru.petrol_brand,
-                          machine_brands['2'][0], ' ->', (len(dict_of_mach[2][1]) + len(dict_of_mach[2][0])) * '*',
-                          sep='')
-                    print(ru.gasoline_3, machine_limits['3'], ru.petrol_brand,
-                          machine_brands_str['3'], '->', (len(dict_of_mach[3][1]) + len(dict_of_mach[3][0])) * '*',
-                          sep='')
+                    for itr in range(1, len(dict_of_mach) + 1):
+                        print(ru.gasoline, itr, ru.max_queue, machine_limits[str(itr)], ru.petrol_brand,
+                              machine_brands_str[str(itr)], ' ->', (len(dict_of_mach[itr][1]) + len(dict_of_mach[itr][0])) * '*',
+                              sep='')
 
             if len(dict_of_mach[itr][0]) == 0 and len(dict_of_mach[itr][1]) > 0:
                 dict_of_mach[itr][0].append(dict_of_mach[itr][1][0])
